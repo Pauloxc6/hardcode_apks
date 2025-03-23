@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 function logs_out() {
     # Diretório onde os logs serão salvos
     local log_dir="./logs"
@@ -53,6 +55,7 @@ function logs_out() {
     echo "===========================" | tee -a "$log_file"
 }
 
+
 function view_logs() {
     echo
 
@@ -104,6 +107,7 @@ function view_logs() {
         fi
     fi
 }
+
 
 function verify_apks() {
     # Encontra os diretórios dentro de 'apks_extract'
@@ -159,7 +163,7 @@ function remove_apks() {
             echo -e "\033[37;1m[+] Deseja remover o apk [$selected_apk] (y/n): \033[0m"
             read -p "root> " ops
 
-            if [[ "$ops" == "y" || "$ops" == "Y" ]]; then
+            if [[ "$ops" == "y" || "$ops" == "Y" || "$ops" == "yes" || "$ops" == "YES" ]]; then
                 rm -rf "$selected_apk"
                 echo -e "\033[32;1m[+] APK removido com sucesso. [+]\033[0m"
             else
@@ -333,8 +337,8 @@ function api_check() {
     rg -Hn --color 'invoke-static .* Ljava/lang/System;->getenv\(Ljava/lang/String;\)Ljava/lang/String;' $selected_apk | logs_out
     echo -e "\e[37;1m[*] Payload 14 (Environment Variables) [DONE]\e[0m"
 
-
 }
+
 
 function secret_check() {
     echo
@@ -423,6 +427,7 @@ function secret_check() {
     echo -e "\e[37;1m[*] Payload 5 (Config Data) [DONE]\e[0m"
 }
 
+
 function content_check() {
     echo
     verify_apks
@@ -440,7 +445,9 @@ function content_check() {
     echo -e "\e[37;1m[*] Payload 1 (Content URLs) [*]\e[0m"
     grep -Hirn "content://[a-zA-Z0-9._-]\+/[a-zA-Z0-9._-]\+" --color "$selected_apk" | logs_out
     echo -e "\e[37;1m[*] Payload 1 (Content URLs) [DONE]\e[0m"
+    
 }
+
 
 function intent_check() {
     echo
@@ -460,6 +467,7 @@ function intent_check() {
     grep -Hirn "[a-zA-Z0-9._-]\+\.intent\.[a-zA-Z0-9._-]\+" --color "$selected_apk" | logs_out
     echo -e "\e[37;1m[*] Payload 1 (Intent URLs) [DONE]\e[0m"
 }
+
 
 function r.strings_check() {
     echo
@@ -485,7 +493,7 @@ function r.strings_check() {
     elif [[ "$default_yn" == "n" || "$default_yn" == "N" || "$default_yn" == "no" || "$default_yn" == "NO" ]]; then
         i=0
         for item in $res_dir; do
-            echo "[+] Resource Dir: ($i) $item [+]"
+            echo "\033[37;1m[+] Resource Dir: (\033[33;1m$i\033[37;1m) \033[33;1m$item\033[37;1m [+]\033[0m"
             ((i++))
         done
 
@@ -558,3 +566,6 @@ function r.strings_check() {
     grep -HirEn 'invoke-static .* Ljava/lang/System;->getenv\(Ljava/lang/String;\)Ljava/lang/String;' --color "$search_files" | logs_out
     echo -e "\e[37;1m[*] Payload 10 (Environment Variables) [DONE]\e[0m"
 }
+
+# Querido Programador:
+# Quando escrevi este código, apenas Deus e eu sabíamos como ele funciona. Agoraa, apenas Deus sabe.

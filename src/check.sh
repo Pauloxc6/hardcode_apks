@@ -39,6 +39,7 @@ function help() {
     echo -e "\t \e[37;1mclear       | Clean the screen"
     echo -e "\t \e[37;1mback        | Go back to the root"
     echo -e "\t \e[37;1mbanner      | Activate the Banner"
+    echo -e "\t \e[37;1mlist        | List Apks"
     echo -e "\e[0m"
 }
 
@@ -61,6 +62,7 @@ while true ;do
     echo -e "\t \e[37;1m2. Secret Check"
     echo -e "\t \e[37;1m3. Content Check"
     echo -e "\t \e[37;1m4. Intent Check"
+    echo -e "\t \e[37;1m5  Strings Check"
     echo -e "\t \e[37;1m0. Exit"
 
     echo -e "\e[0m"
@@ -82,6 +84,9 @@ while true ;do
         4)
             intent_check ;;
 
+        5) 
+            r.strings_check ;;
+
         #-----------------------------------------
        
         help)
@@ -95,7 +100,7 @@ while true ;do
             clear ;;
 
         back)
-           ./main.sh;;
+           ./main.sh ;;
 
         banner)
             banner1 ;;
@@ -105,6 +110,18 @@ while true ;do
             echo -e "\e[37;1mVersion: 1.0\e[0m" 
             echo "" ;;
 
+         list)
+            # Encontra os diretórios dentro de 'apks_extract'
+            out=$(find $PWD/apks_extract -mindepth 1 -maxdepth 1 -type d)
+
+            # Lista os diretórios encontrados
+            i=0
+            for item in $out; do
+                echo -e "\033[37;1m[+] File [\033[33;1m$i\033[37;1m]: \033[33;1m$item \033[37;1m[+]\033[0m"
+                ((i++))
+            done
+        ;;
+        
         *)
             echo -e "\e[31;1m[*] Error in the program! [*]\n\e[0m"
             sleep 1
